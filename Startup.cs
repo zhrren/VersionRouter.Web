@@ -25,7 +25,7 @@ namespace WebApplication
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"settings/appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                .AddJsonFile($"settings/appsettings.{env.EnvironmentName.ToLower()}.json", optional: true, reloadOnChange: true);
 
             if (env.IsDevelopment())
             {
@@ -73,14 +73,13 @@ namespace WebApplication
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                env.ConfigureNLog("nlog.config");
             }
             else
             {
-                var nlogPath = Path.Combine(env.ContentRootPath, $"nlog.{env.EnvironmentName}.config");
+                var nlogPath = Path.Combine(env.ContentRootPath, $"nlog.{env.EnvironmentName.ToLower()}.config");
                 if(File.Exists(nlogPath))
-                    env.ConfigureNLog($"settings/nlog.{env.EnvironmentName}.config");
-                else
-                    env.ConfigureNLog("nlog.config");
+                    env.ConfigureNLog($"settings/nlog.{env.EnvironmentName.ToLower()}.config");
 
                 app.UseExceptionHandler("/Home/Error");
             }
