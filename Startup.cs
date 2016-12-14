@@ -67,20 +67,20 @@ namespace WebApplication
             loggerFactory.AddDebug();
             loggerFactory.AddNLog();
 
+            var nlogPath = Path.Combine(env.ContentRootPath, $"settings/nlog.{env.EnvironmentName.ToLower()}.config");
+            if(File.Exists(nlogPath))
+                env.ConfigureNLog($"settings/nlog.{env.EnvironmentName.ToLower()}.config");
+            else
+                env.ConfigureNLog("nlog.config");
+
             if (env.IsDevelopment())
             {
-                env.ConfigureNLog("nlog.config");
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
-                env.ConfigureNLog("nlog.config");
             }
             else
             {
-                var nlogPath = Path.Combine(env.ContentRootPath, $"settings/nlog.{env.EnvironmentName.ToLower()}.config");
-                if(File.Exists(nlogPath))
-                    env.ConfigureNLog($"settings/nlog.{env.EnvironmentName.ToLower()}.config");
-
                 app.UseExceptionHandler("/Home/Error");
             }
 
