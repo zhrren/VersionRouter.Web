@@ -77,7 +77,7 @@ namespace WebApplication
             }
             else
             {
-                var nlogPath = Path.Combine(env.ContentRootPath, $"nlog.{env.EnvironmentName.ToLower()}.config");
+                var nlogPath = Path.Combine(env.ContentRootPath, $"settings/nlog.{env.EnvironmentName.ToLower()}.config");
                 if(File.Exists(nlogPath))
                     env.ConfigureNLog($"settings/nlog.{env.EnvironmentName.ToLower()}.config");
 
