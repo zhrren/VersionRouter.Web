@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using VersionRouter.Web.Base;
 using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using System.IO;
-using VersionRouter.Web.Services;
 using Microsoft.AspNetCore.HttpOverrides;
+using VersionRouter.Web.Base;
+using VersionRouter.Web.Services;
 
-namespace WebApplication
+namespace VersionRouter.Web
 {
     public class Startup
     {

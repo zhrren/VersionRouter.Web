@@ -1,5 +1,5 @@
 {
-  "userSecretsId": "aspnet-WebApplication-0799fe3e-6eaf-4c5f-b40e-7c6bfd5dfa9a",
+  "userSecretsId": "aspnet-VersionRouter.Web-0799fe3e-6eaf-4c5f-b40e-7c6bfd5dfa9a",
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.1.0-preview1-001153-00",
@@ -110,6 +110,6 @@
     ]
   },
   "tooling": {
-    "defaultNamespace": "WebApplication"
+    "defaultNamespace": "VersionRouter.Web"
   }
 }

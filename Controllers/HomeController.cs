@@ -7,25 +7,27 @@ using Microsoft.Extensions.Options;
 using VersionRouter.Web.Base;
 using VersionRouter.Web.Services;
 using NLog;
+using Mark.VersionRouter;
 
-namespace WebApplication.Controllers
+namespace VersionRouter.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger _log = LogManager.GetCurrentClassLogger();
-        private readonly IVersionSettingsService _formatOptions;
+        private readonly IVersionSettingsService _versionSettingsService;
 
-        public HomeController(IVersionSettingsService formatOptions)
+        public HomeController(IVersionSettingsService versionSettingsService)
         {
-            _formatOptions = formatOptions;
+            _versionSettingsService = versionSettingsService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string name, string platform="", string vesion="", string uid="")
         {
-            _log.Info("Index");
-
-            var list = _formatOptions.GetPackages("dd");
-            return Content("ContentResult"+ _formatOptions.GetHashCode());
+            var packages = _versionSettingsService.GetPackages(name);
+            var groups = _versionSettingsService.GetGroups();
+            var router = new Router(packages, groups);
+            var item = router.Match(platform, vesion, uid);
+            return Redirect(item.Url);
         }
 
         public IActionResult Error()

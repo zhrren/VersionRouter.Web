@@ -9,5 +9,6 @@ namespace VersionRouter.Web.Services
     public interface IVersionSettingsService
     {
         List<Package> GetPackages(string name);
+        List<Group> GetGroups();
     }
 }
