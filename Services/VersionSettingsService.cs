@@ -32,7 +32,7 @@ namespace VersionRouter.Web.Services
                 if (!Directory.Exists(settingsPath))
                     Directory.CreateDirectory(settingsPath);
 
-                _versionsPath = Path.Combine(_env.ContentRootPath, "versions");
+                _versionsPath = Path.Combine(settingsPath, "versions");
                 if (!Directory.Exists(_versionsPath))
                     Directory.CreateDirectory(_versionsPath);
 
