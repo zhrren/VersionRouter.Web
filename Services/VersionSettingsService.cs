@@ -16,7 +16,7 @@ namespace VersionRouter.Web.Services
     public class VersionSettingsService : IVersionSettingsService
     {
         private readonly IHostingEnvironment _env;
-        private string _settingsPath;
+        private string _versionsPath;
         private Dictionary<string, List<Package>> _packages;
 
         public VersionSettingsService(IHostingEnvironment env)
@@ -28,11 +28,15 @@ namespace VersionRouter.Web.Services
         {
             if (_packages == null)
             {
-                _settingsPath = Path.Combine(_env.ContentRootPath, "settings");
-                if (!Directory.Exists(_settingsPath))
-                    Directory.CreateDirectory(_settingsPath);
+                var settingsPath = Path.Combine(_env.ContentRootPath, "settings");
+                if (!Directory.Exists(settingsPath))
+                    Directory.CreateDirectory(settingsPath);
 
-                IFileProvider fileProvider = new PhysicalFileProvider(_settingsPath);
+                _versionsPath = Path.Combine(_env.ContentRootPath, "versions");
+                if (!Directory.Exists(_versionsPath))
+                    Directory.CreateDirectory(_versionsPath);
+
+                IFileProvider fileProvider = new PhysicalFileProvider(_versionsPath);
                 ChangeToken.OnChange(() => fileProvider.Watch("*.json"), () =>
                     Reload(fileProvider));
 
@@ -48,7 +52,7 @@ namespace VersionRouter.Web.Services
 
         private void Reload(IFileProvider fileProvider)
         {
-            var files = Directory.GetFiles(_settingsPath);
+            var files = Directory.GetFiles(_versionsPath);
             foreach (var file in files)
             {
                 var filename = Path.GetFileName(file);

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using System.IO;
 using VersionRouter.Web.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace WebApplication
 {
@@ -24,7 +25,7 @@ namespace WebApplication
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                .AddJsonFile($"settings/appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             if (env.IsDevelopment())
             {
@@ -77,7 +78,7 @@ namespace WebApplication
             {
                 var nlogPath = Path.Combine(env.ContentRootPath, $"nlog.{env.EnvironmentName}.config");
                 if(File.Exists(nlogPath))
-                    env.ConfigureNLog($"nlog.{env.EnvironmentName}.config");
+                    env.ConfigureNLog($"settings/nlog.{env.EnvironmentName}.config");
                 else
                     env.ConfigureNLog("nlog.config");
 
@@ -95,6 +96,11 @@ namespace WebApplication
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
         }
     }
