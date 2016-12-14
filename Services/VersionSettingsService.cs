@@ -47,7 +47,7 @@ namespace VersionRouter.Web.Services
             }
 
             List<Package> result;
-            if (!_packages.TryGetValue(name, out result))
+            if (string.IsNullOrWhiteSpace(name) || !_packages.TryGetValue(name, out result))
                 result = new List<Package>();
             return result;
         }
@@ -81,11 +81,11 @@ namespace VersionRouter.Web.Services
                 if (!Directory.Exists(settingsPath))
                     Directory.CreateDirectory(settingsPath);
 
-                _versionsPath = Path.Combine(settingsPath, "groups");
+                _groupPath = Path.Combine(settingsPath, "groups");
                 if (!Directory.Exists(_versionsPath))
-                    Directory.CreateDirectory(_versionsPath);
+                    Directory.CreateDirectory(_groupPath);
 
-                IFileProvider fileProvider = new PhysicalFileProvider(_versionsPath);
+                IFileProvider fileProvider = new PhysicalFileProvider(_groupPath);
                 ChangeToken.OnChange(() => fileProvider.Watch("*.txt"), () =>
                     ReloadGroup(fileProvider));
 

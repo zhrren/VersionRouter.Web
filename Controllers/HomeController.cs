@@ -21,13 +21,18 @@ namespace VersionRouter.Web.Controllers
             _versionSettingsService = versionSettingsService;
         }
 
-        public IActionResult Index(string name, string platform="", string vesion="", string uid="")
+        public IActionResult Index(string name="", string platform="", string vesion="1.0.0", string uid="", bool redirect=false)
         {
             var packages = _versionSettingsService.GetPackages(name);
             var groups = _versionSettingsService.GetGroups();
             var router = new Router(packages, groups);
             var item = router.Match(platform, vesion, uid);
-            return Redirect(item.Url);
+
+            var url = item == null ? "" : item.Url;
+            if(redirect && !string.IsNullOrWhiteSpace(url))
+                return Redirect(item.Url);
+            else
+                return Content(url);
         }
 
         public IActionResult Error()
