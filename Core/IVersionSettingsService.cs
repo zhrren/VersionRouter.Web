@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VersionRouter.Web.Services
+namespace VersionRouter.Web.Core
 {
     public interface IVersionSettingsService
     {

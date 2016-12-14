@@ -11,7 +11,7 @@ using Microsoft.Extensions.Primitives;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace VersionRouter.Web.Services
+namespace VersionRouter.Web.Core
 {
     public class VersionSettingsService : IVersionSettingsService
     {

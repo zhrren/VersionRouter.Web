@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VersionRouter.Web.Base
+namespace VersionRouter.Web.Core
 {
     public class Settings
     {

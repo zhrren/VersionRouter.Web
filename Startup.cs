@@ -13,8 +13,7 @@ using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using System.IO;
 using Microsoft.AspNetCore.HttpOverrides;
-using VersionRouter.Web.Base;
-using VersionRouter.Web.Services;
+using VersionRouter.Web.Core;
 
 namespace VersionRouter.Web
 {
