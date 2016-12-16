@@ -40,7 +40,8 @@
     },
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Mark.VersionRouter": "1.0.0",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5"
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5",
+    "Mark.ApiResult": "4.0.0"
   },
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": {
