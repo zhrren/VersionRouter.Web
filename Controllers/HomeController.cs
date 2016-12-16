@@ -17,7 +17,7 @@ namespace VersionRouter.Web.Controllers
             _versionSettingsService = versionSettingsService;
         }
 
-        public IActionResult Index(string name = "", string platform = "", string vesion = "1.0.0", string uid = "", bool redirect = false)
+        public IActionResult Index(string name = "", string platform = "", string vesion = "1.0.0", string uid = "", string basever = "", bool redirect = false)
         {
             var packages = _versionSettingsService.GetPackages(name);
             var groups = _versionSettingsService.GetGroups();
@@ -25,35 +25,28 @@ namespace VersionRouter.Web.Controllers
             var item = router.Match(platform, vesion, uid);
 
             var url = item == null ? "" : item.Url;
-            if (redirect && !string.IsNullOrWhiteSpace(url))
-                return Redirect(item.Url);
-            else
-                return Content(url);
-        }
 
-        public IActionResult Check(string name = "", string platform = "", string vesion = "1.0.0", string ver = "1.0.0", string uid = "")
-        {
-            var packages = _versionSettingsService.GetPackages(name);
-            var groups = _versionSettingsService.GetGroups();
-            var router = new Router(packages, groups);
-            var item = router.Match(platform, vesion, uid);
-
-            if (item != null)
+            if (!string.IsNullOrWhiteSpace(basever))
             {
-                Version runVersion;
-                if (Version.TryParse(ver, out runVersion))
+                Version baseVersion;
+                if (Version.TryParse(basever, out baseVersion))
                 {
                     var fullVersion = new Version(
-                         runVersion.Major >= 0 ? runVersion.Major : 0,
-                         runVersion.Minor >= 0 ? runVersion.Minor : 0,
-                         runVersion.Build >= 0 ? runVersion.Build : 0,
-                         runVersion.Revision >= 0 ? runVersion.Revision : 0);
+                         baseVersion.Major >= 0 ? baseVersion.Major : 0,
+                         baseVersion.Minor >= 0 ? baseVersion.Minor : 0,
+                         baseVersion.Build >= 0 ? baseVersion.Build : 0,
+                         baseVersion.Revision >= 0 ? baseVersion.Revision : 0);
 
                     if (fullVersion < item.PackageVersion)
                         return Content(item.Url);
                 }
+
+                return Content("");
             }
-            return Content("");
+            else if (redirect && !string.IsNullOrWhiteSpace(url))
+                return Redirect(item.Url);
+            else
+                return Content(url);
         }
 
         public IActionResult Error()
