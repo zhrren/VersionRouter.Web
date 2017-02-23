@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VersionRouter.Web.Core;
 using NLog;
 using Mark.VersionRouter;
@@ -17,14 +17,28 @@ namespace VersionRouter.Web.Controllers
             _versionSettingsService = versionSettingsService;
         }
 
-        public IActionResult Index(string name = "", string platform = "", string vesion = "1.0.0", string uid = "", string basever = "", bool redirect = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name">客户端标识</param>
+        /// <param name="platform">客户端平台名称</param>
+        /// <param name="vesion">客户端版本</param>
+        /// <param name="uid">用户标识</param>
+        /// <param name="basever">软件包版本</param>
+        /// <param name="redirect">是否自动跳转</param>
+        /// <returns>
+        /// 1、空字符
+        /// 2、跳转到新Url，当basever="" && redirect=true
+        /// 3、Url
+        /// 4、{url: "", payload: ""}，当payload=true
+        /// </returns>
+        public IActionResult Index(string name = "", string platform = "", string vesion = "1.0.0",
+            string uid = "", string basever = "", bool redirect = false, bool payload = false)
         {
             var packages = _versionSettingsService.GetPackages(name);
             var groups = _versionSettingsService.GetGroups();
             var router = new Router(packages, groups);
             var item = router.Match(platform, vesion, uid);
-
-            var url = item == null ? "" : item.Url;
 
             if (!string.IsNullOrWhiteSpace(basever))
             {
@@ -38,15 +52,41 @@ namespace VersionRouter.Web.Controllers
                          baseVersion.Revision >= 0 ? baseVersion.Revision : 0);
 
                     if (fullVersion < item.PackageVersion)
-                        return Content(item.Url);
+                        return CreateContent(item, redirect, payload);
                 }
 
-                return Content("");
+                return CreateContent(null, redirect, payload);
             }
-            else if (redirect && !string.IsNullOrWhiteSpace(url))
-                return Redirect(item.Url);
             else
-                return Content(url);
+                return CreateContent(item, redirect, payload);
+        }
+
+        private IActionResult CreateContent(Entry item, bool redirect, bool payload)
+        {
+            if (item == null)
+                return Content("");
+
+            if (redirect)
+            {
+                return Redirect(item.Url);
+            }
+            else
+            {
+
+                if (payload)
+                {
+                    var result = new
+                    {
+                        url = item.Url,
+                        payload = item.Payload
+                    };
+                    return Json(result);
+                }
+                else
+                {
+                    return Content(item.Url);
+                }
+            }
         }
 
         public IActionResult Error()
